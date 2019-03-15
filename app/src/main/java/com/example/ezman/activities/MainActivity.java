@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity
                         }else{
                             Log.d(TAG, "googleapiclient is null");
                         }
-                        startActivity(new Intent(MainActivity.this, TestActivity.class));
+                        startActivity(new Intent(MainActivity.this, DashboardActivity.class));
 
                     }else{
                         Toast.makeText(MainActivity.this, GlobalVariables.INVALID_LOGIN, Toast.LENGTH_SHORT).show();
@@ -137,7 +137,6 @@ public class MainActivity extends AppCompatActivity
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         }, new Response.ErrorListener() {
             @Override
