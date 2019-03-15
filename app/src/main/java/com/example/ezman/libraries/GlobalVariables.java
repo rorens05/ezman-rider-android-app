@@ -67,6 +67,7 @@ public class GlobalVariables {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(context, "Unable to connect to the server while updating the location", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, ("Disconnected from the server"), Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
