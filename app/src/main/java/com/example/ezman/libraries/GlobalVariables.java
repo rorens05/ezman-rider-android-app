@@ -9,11 +9,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.ezman.models.Rider;
+import com.example.ezman.models.Transaction;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GlobalVariables {
@@ -21,6 +24,7 @@ public class GlobalVariables {
     public static final String SERVER = "http://192.168.43.194:3000/rider_api/";
     public static final String LOGIN_URL = SERVER + "login";
     public static final String UPDATE_LOCATION_URL = SERVER + "update_location";
+    public static final String GET_TRANSACTIONS = SERVER + "get_transactions";
 
 
 
@@ -30,7 +34,8 @@ public class GlobalVariables {
     public static String latitude = "0";
     public static String longitute = "0";
     public static Rider rider = new Rider();
-
+    public static List<Transaction> transactionList = new ArrayList<>();
+    public static Transaction selectedTransaction = new Transaction();
 
 
 
@@ -46,7 +51,7 @@ public class GlobalVariables {
     public static final String SUCCESS = "success";
     public static final String CONNECTION_FAILURE = "Cannot connect to the server";
     public static final String INVALID_LOGIN = "Invalid email and/or password combination";
-
+    public static final String SOMETHING_WENT_WRONG = "Something went wrong, please try again";
     //useful functions
 
     public static void updateLocationOnServer(final Context context){
