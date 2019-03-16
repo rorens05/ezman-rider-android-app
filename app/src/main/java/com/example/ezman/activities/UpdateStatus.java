@@ -1,5 +1,6 @@
 package com.example.ezman.activities;
 
+import android.app.ProgressDialog;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,8 +13,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.example.ezman.R;
 import com.example.ezman.libraries.GlobalVariables;
+import com.example.ezman.libraries.MySingleton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class UpdateStatus extends AppCompatActivity {
 
@@ -38,6 +51,7 @@ public class UpdateStatus extends AppCompatActivity {
     Button s_save;
 
     EditText s_note;
+    ProgressDialog progressDialog;
 
     String status = "Processing";
 
@@ -72,7 +86,9 @@ public class UpdateStatus extends AppCompatActivity {
 
         s_note = findViewById(R.id.s_note);
         s_save = findViewById(R.id.s_save);
-
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Please wait");
         s_note.setText(GlobalVariables.selectedTransaction.notice);
 
         s_note.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +143,17 @@ public class UpdateStatus extends AppCompatActivity {
                 status = "Failed";
             }
         });
+        s_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressDialog.show();
+                if(status.equalsIgnoreCase("Delivered")){
+                    update_delivered();
+                }else{
+                    update_status();
+                }
+            }
+        });
 
     }
 
@@ -167,5 +194,90 @@ public class UpdateStatus extends AppCompatActivity {
                 si_failed_t.setTextColor(ContextCompat.getColor(UpdateStatus.this, R.color.colorPrimary));
                 break;
         }
+    }
+
+    public void update_status(){
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, GlobalVariables.UPDATE_STATUS, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if (jsonObject.getString("status").equalsIgnoreCase("success")) {
+                        Toast.makeText(UpdateStatus.this, "Successfully updated", Toast.LENGTH_SHORT).show();
+                        GlobalVariables.selectedTransaction.status = status;
+                        GlobalVariables.selectedTransaction.notice = s_note.getText().toString();
+                        finish();
+                    }else{
+                        Toast.makeText(UpdateStatus.this, jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(UpdateStatus.this, GlobalVariables.SOMETHING_WENT_WRONG, Toast.LENGTH_SHORT).show();
+                }
+                progressDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(UpdateStatus.this, GlobalVariables.CONNECTION_FAILURE, Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> params = new HashMap<>();
+                params.put("status", status);
+                params.put("notice", s_note.getText().toString());
+                params.put("id", GlobalVariables.selectedTransaction.id);
+                return params;
+            }
+        };
+        MySingleton.getInstance(this).addToRequestQueue(stringRequest);
+    }
+
+    public void update_delivered(){
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, GlobalVariables.UPDATE_DELIVERED, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    if (jsonObject.getString("status").equalsIgnoreCase("success")) {
+                        Toast.makeText(UpdateStatus.this, "Successfully updated", Toast.LENGTH_SHORT).show();
+                        GlobalVariables.selectedTransaction.status = status;
+                        GlobalVariables.selectedTransaction.notice = s_note.getText().toString();
+                        finish();
+                    }else{
+                        Toast.makeText(UpdateStatus.this, jsonObject.getString("error"), Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(UpdateStatus.this, GlobalVariables.SOMETHING_WENT_WRONG, Toast.LENGTH_SHORT).show();
+                }
+                progressDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(UpdateStatus.this, GlobalVariables.CONNECTION_FAILURE, Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> params = new HashMap<>();
+                params.put("lat", GlobalVariables.latitude);
+                params.put("long", GlobalVariables.longitute);
+                params.put("notice", s_note.getText().toString());
+                params.put("id", GlobalVariables.selectedTransaction.id);
+                return params;
+            }
+        };
+        MySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 }

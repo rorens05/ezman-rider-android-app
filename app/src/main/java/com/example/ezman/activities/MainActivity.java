@@ -2,11 +2,14 @@ package com.example.ezman.activities;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -69,7 +72,10 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        checkIfGPSIsEnabled();
         checkLocationPermision();
+
+        
         init();
     }
 
@@ -102,6 +108,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void login(){
+        pd = new ProgressDialog(this);
+        pd.setMessage("Logging in..");
+        pd.setCancelable(false);
+        pd.show();
         StringRequest login = new StringRequest(Request.Method.POST, GlobalVariables.LOGIN_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -129,7 +139,7 @@ public class MainActivity extends AppCompatActivity
                         }else{
                             Log.d(TAG, "googleapiclient is null");
                         }
-                        startActivity(new Intent(MainActivity.this, DashboardActivity.class));
+                        startActivityForResult(new Intent(MainActivity.this, DashboardActivity.class),1);
 
                     }else{
                         Toast.makeText(MainActivity.this, GlobalVariables.INVALID_LOGIN, Toast.LENGTH_SHORT).show();
@@ -137,12 +147,14 @@ public class MainActivity extends AppCompatActivity
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                pd.dismiss();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d(TAG, "No response received");
                 Toast.makeText(MainActivity.this, GlobalVariables.CONNECTION_FAILURE, Toast.LENGTH_SHORT).show();
+                pd.dismiss();
             }
         }){
             @Override
@@ -154,6 +166,26 @@ public class MainActivity extends AppCompatActivity
             }
         };
         MySingleton.getInstance(MainActivity.this).addToRequestQueue(login);
+    }
+
+    public void checkIfGPSIsEnabled(){
+
+        String locationProviders = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+        if (locationProviders == null || locationProviders.equals("")) {
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which){
+                        case DialogInterface.BUTTON_POSITIVE:
+                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                            break;
+                    }
+                }
+            };
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("GPS is required, Please turn on location").setPositiveButton("Yes", dialogClickListener).show();
+        }
     }
 
     public void updateLocation(){
@@ -288,7 +320,7 @@ public class MainActivity extends AppCompatActivity
 
         pd.dismiss();
         if (location != null) {
-            Toast.makeText(getApplicationContext(), "Latitude : " + location.getLatitude() + "\nLongitude : " + location.getLongitude(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Latitude : " + location.getLatitude() + "\nLongitude : " + location.getLongitude(), Toast.LENGTH_SHORT).show();
             GlobalVariables.latitude = String.valueOf(location.getLatitude());
             GlobalVariables.longitute = String.valueOf(location.getLongitude());
             GlobalVariables.updateLocationOnServer(this);
@@ -326,7 +358,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onLocationChanged(Location location) {
         if (location != null) {
-            Toast.makeText(this, "Latitude : " + location.getLatitude() + "\nLongitude : " + location.getLongitude(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Latitude : " + location.getLatitude() + "\nLongitude : " + location.getLongitude(), Toast.LENGTH_SHORT).show();
             GlobalVariables.latitude = String.valueOf(location.getLatitude());
             GlobalVariables.longitute = String.valueOf(location.getLongitude());
             GlobalVariables.updateLocationOnServer(this);
@@ -344,6 +376,13 @@ public class MainActivity extends AppCompatActivity
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        finish();
+    }
+
 
 
 }

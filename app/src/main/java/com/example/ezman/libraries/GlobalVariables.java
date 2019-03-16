@@ -25,9 +25,8 @@ public class GlobalVariables {
     public static final String LOGIN_URL = SERVER + "login";
     public static final String UPDATE_LOCATION_URL = SERVER + "update_location";
     public static final String GET_TRANSACTIONS = SERVER + "get_transactions";
-
-
-
+    public static final String UPDATE_STATUS = SERVER + "update_status";
+    public static final String UPDATE_DELIVERED = SERVER + "update_delivered";
 
 
     //observable

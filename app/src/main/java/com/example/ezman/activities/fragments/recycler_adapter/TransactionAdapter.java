@@ -68,7 +68,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         myViewHolder.container.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, t.customer + " was clicked", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, t.customer + " was clicked", Toast.LENGTH_SHORT).show();
                 GlobalVariables.selectedTransaction = t;
                 ((Activity) context).startActivityForResult(new Intent(context, OrderInformationActivity.class), 1);
             }
