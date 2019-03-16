@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.ezman.R;
 import com.example.ezman.activities.OrderInformationActivity;
+import com.example.ezman.libraries.GlobalVariables;
 import com.example.ezman.models.Transaction;
 import com.squareup.picasso.Picasso;
 
@@ -68,6 +69,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, t.customer + " was clicked", Toast.LENGTH_SHORT).show();
+                GlobalVariables.selectedTransaction = t;
                 ((Activity) context).startActivityForResult(new Intent(context, OrderInformationActivity.class), 1);
             }
         });

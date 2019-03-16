@@ -20,6 +20,9 @@ public class Transaction {
     public String time;
     public String location_x;
     public String location_y;
+    public String email;
+    public String contact_no;
+    public String address;
 
 
     public Transaction() {
@@ -44,6 +47,12 @@ public class Transaction {
                 ", date='" + date + '\'' +
                 ", total='" + total + '\'' +
                 ", actual_location='" + actual_location + '\'' +
+                ", time='" + time + '\'' +
+                ", location_x='" + location_x + '\'' +
+                ", location_y='" + location_y + '\'' +
+                ", email='" + email + '\'' +
+                ", contact_no='" + contact_no + '\'' +
+                ", address='" + address + '\'' +
                 '}';
     }
 }

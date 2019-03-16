@@ -89,6 +89,9 @@ public class TransactionFragment extends Fragment {
                         temp.date = array.getJSONObject(i).getString("date");
                         temp.total = array.getJSONObject(i).getString("total");
                         temp.actual_location = array.getJSONObject(i).getString("actual_location");
+                        temp.email = array.getJSONObject(i).getString("email");
+                        temp.address = array.getJSONObject(i).getString("address");
+                        temp.contact_no = array.getJSONObject(i).getString("contact_no");
                         GlobalVariables.transactionList.add(temp);
                     }
                     loadRecyclerView();
