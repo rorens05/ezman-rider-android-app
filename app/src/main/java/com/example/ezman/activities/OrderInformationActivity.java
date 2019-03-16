@@ -1,5 +1,6 @@
 package com.example.ezman.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,6 +21,7 @@ public class OrderInformationActivity extends AppCompatActivity {
     TextView subTotal;
     TextView shipping;
     TextView total;
+    TextView note;
 
     Button start;
 
@@ -45,9 +47,12 @@ public class OrderInformationActivity extends AppCompatActivity {
         shipping = findViewById(R.id.oi_shipping);
         total = findViewById(R.id.oi_total);
         start = findViewById(R.id.io_start);
+        note = findViewById(R.id.oi_note);
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               // startActivityForResult(new Intent(OrderInformationActivity.this, UpdateStatus.class), 1);
+                startActivity(new Intent(OrderInformationActivity.this, UpdateStatus.class));
 
             }
         });
@@ -61,9 +66,8 @@ public class OrderInformationActivity extends AppCompatActivity {
         subTotal.setText("₱" + GlobalVariables.selectedTransaction.sub_total);
         shipping.setText("₱" + GlobalVariables.selectedTransaction.shipping_fee);
         total.setText("₱" + GlobalVariables.selectedTransaction.total);
+        note.setText(GlobalVariables.selectedTransaction.notice);
     }
-
-
 
     @Override
     public boolean onSupportNavigateUp(){
