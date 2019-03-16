@@ -1,6 +1,8 @@
 package com.example.ezman.activities.fragments.recycler_adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ezman.R;
+import com.example.ezman.activities.OrderInformationActivity;
 import com.example.ezman.models.Transaction;
 import com.squareup.picasso.Picasso;
 
@@ -56,7 +59,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         }else{
             Picasso.get()
                     .load(t.image)
-                    .resize(100, 100)
+                    .resize(150, 150)
                     .centerCrop()
                     .into(myViewHolder.image);
         }
@@ -65,6 +68,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, t.customer + " was clicked", Toast.LENGTH_SHORT).show();
+                ((Activity) context).startActivityForResult(new Intent(context, OrderInformationActivity.class), 1);
             }
         });
     }

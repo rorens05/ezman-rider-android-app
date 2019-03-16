@@ -117,14 +117,7 @@ public class TransactionFragment extends Fragment {
     public void loadRecyclerView() {
 
         Log.d(TAG, "initializing recyclerview adapter");
-        Transaction t = new Transaction();
-        t.customer = "laurence bautista";
-        t.delivery_location = "Anda";
-        t.items = "List of Items sample 1 sample 2";
-        t.status = "Failed";
-        t.short_date = "Mar 4";
-        t.image = "http://192.168.43.194:3000/images/logo.png";
-        GlobalVariables.transactionList.add(t);
+
 
         Collections.reverse(GlobalVariables.transactionList);
         transactionAdapter = new TransactionAdapter(GlobalVariables.transactionList, getActivity());
