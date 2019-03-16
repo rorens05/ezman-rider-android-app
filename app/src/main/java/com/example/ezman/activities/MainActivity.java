@@ -123,9 +123,7 @@ public class MainActivity extends AppCompatActivity
                         JSONObject jRider = data.getJSONObject("data");
                         GlobalVariables.rider = new Rider(
                                 jRider.getString("id"),
-                                jRider.getString("first_name"),
-                                jRider.getString("last_name"),
-                                jRider.getString("mi"),
+                                jRider.getString("name"),
                                 jRider.getString("email"),
                                 jRider.getString("contact_no"),
                                 jRider.getString("address"),
