@@ -8,8 +8,8 @@
 
     <item
         android:id="@+id/navigation_customer"
-        android:icon="@drawable/ic_people_black_24dp"
-        android:title="Customers" />
+        android:icon="@drawable/ic_chat_black_24dp"
+        android:title="Chat" />
 
     <item
         android:id="@+id/navigation_profile"

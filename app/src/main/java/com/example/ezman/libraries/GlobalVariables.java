@@ -22,7 +22,8 @@ import java.util.Map;
 
 public class GlobalVariables {
     //constants
-    public static final String SERVER = "http://192.168.43.194:3000/rider_api/";
+    //public static final String SERVER = "http://192.168.43.194:3000/rider_api/";
+    public static final String SERVER = "https://ezman.herokuapp.com/rider_api/";
     public static final String LOGIN_URL = SERVER + "login";
     public static final String UPDATE_LOCATION_URL = SERVER + "update_location";
     public static final String GET_TRANSACTIONS = SERVER + "get_transactions";
