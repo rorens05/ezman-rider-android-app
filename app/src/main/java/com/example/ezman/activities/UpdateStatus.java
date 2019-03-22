@@ -1,9 +1,13 @@
 package com.example.ezman.activities;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -25,6 +29,7 @@ import com.example.ezman.libraries.MySingleton;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -132,6 +137,7 @@ public class UpdateStatus extends AppCompatActivity {
                 si_delivered.setColorFilter(ContextCompat.getColor(UpdateStatus.this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
                 si_delivered_t.setTextColor(ContextCompat.getColor(UpdateStatus.this, R.color.colorPrimary));
                 status = "Delivered";
+                startActivity(new Intent(UpdateStatus.this, SignatureActivity.class));
             }
         });
         failed.setOnClickListener(new View.OnClickListener() {
@@ -141,6 +147,7 @@ public class UpdateStatus extends AppCompatActivity {
                 si_failed.setColorFilter(ContextCompat.getColor(UpdateStatus.this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
                 si_failed_t.setTextColor(ContextCompat.getColor(UpdateStatus.this, R.color.colorPrimary));
                 status = "Failed";
+
             }
         });
         s_save.setOnClickListener(new View.OnClickListener() {
@@ -148,7 +155,12 @@ public class UpdateStatus extends AppCompatActivity {
             public void onClick(View v) {
                 progressDialog.show();
                 if(status.equalsIgnoreCase("Delivered")){
-                    update_delivered();
+                    if (GlobalVariables.bitmap == null) {
+                        Toast.makeText(UpdateStatus.this, "Please get the signature of the customer first", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                    }else{
+                        update_delivered();
+                    }
                 }else{
                     update_status();
                 }
@@ -275,9 +287,18 @@ public class UpdateStatus extends AppCompatActivity {
                 params.put("long", GlobalVariables.longitute);
                 params.put("notice", s_note.getText().toString());
                 params.put("id", GlobalVariables.selectedTransaction.id);
+                params.put("image", GlobalVariables.compressed_bitmap);
                 return params;
             }
         };
         MySingleton.getInstance(this).addToRequestQueue(stringRequest);
+    }
+
+    public String imageToString(Bitmap bitmap){
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] imageBytes = byteArrayOutputStream.toByteArray();
+        Log.d("TAG", Base64.encodeToString(imageBytes, Base64.DEFAULT));
+        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
     }
 }

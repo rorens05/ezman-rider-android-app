@@ -1,6 +1,7 @@
 package com.example.ezman.libraries;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -28,22 +29,14 @@ public class GlobalVariables {
     public static final String UPDATE_STATUS = SERVER + "update_status";
     public static final String UPDATE_DELIVERED = SERVER + "update_delivered";
 
-
     //observable
     public static String latitude = "0";
     public static String longitute = "0";
     public static Rider rider = new Rider();
     public static List<Transaction> transactionList = new ArrayList<>();
     public static Transaction selectedTransaction = new Transaction();
-
-
-
-
-
-
-
-
-
+    public static Bitmap bitmap = null;
+    public static String compressed_bitmap = null;
 
     //messages
     public static final String FAILED = "failed";

@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which){
                         case DialogInterface.BUTTON_POSITIVE:
-                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                            finish();
                             break;
                     }
                 }

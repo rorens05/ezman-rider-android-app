@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.UpdateStatus"></activity>
+        <activity android:name=".activities.SignatureActivity"></activity>
+        <activity android:name=".activities.UpdateStatus" />
         <activity android:name=".activities.OrderInformationActivity" />
         <activity
             android:name=".activities.DashboardActivity"

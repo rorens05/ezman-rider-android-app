@@ -80,6 +80,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
                 ((Activity) context).startActivityForResult(new Intent(context, OrderInformationActivity.class), 1);
             }
         });
+
     }
 
     @Override
