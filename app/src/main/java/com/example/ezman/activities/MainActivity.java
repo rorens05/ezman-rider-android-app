@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -46,6 +47,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.ezman.libraries.GlobalVariables.pref;
+
 public class MainActivity extends AppCompatActivity
         implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -75,8 +78,9 @@ public class MainActivity extends AppCompatActivity
         checkIfGPSIsEnabled();
         checkLocationPermision();
 
-        
+
         init();
+        rememberUser();
     }
 
     public void checkLocationPermision(){
@@ -137,9 +141,13 @@ public class MainActivity extends AppCompatActivity
                         }else{
                             Log.d(TAG, "googleapiclient is null");
                         }
+                        GlobalVariables.username = email.getText().toString();
+                        GlobalVariables.password = password.getText().toString();
+
                         startActivityForResult(new Intent(MainActivity.this, DashboardActivity.class),1);
 
                     }else{
+                        clearCachedOfUser();
                         Toast.makeText(MainActivity.this, GlobalVariables.INVALID_LOGIN, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
@@ -381,6 +389,24 @@ public class MainActivity extends AppCompatActivity
         finish();
     }
 
+    public void rememberUser(){
+        Log.d(TAG, "reading cache");
+        pref = getApplicationContext().getSharedPreferences(GlobalVariables.CACHE_KEY, 0);
+        if (pref.getString("username", null) == null) {
+            //clearCachedOfUser();
+        }else{
+            Toast.makeText(this, pref.getString("username", null), Toast.LENGTH_SHORT).show();
+            email.setText(pref.getString("username", null));
+            password.setText(pref.getString("password", null));
+            login();
+        }
+    }
 
+    public void clearCachedOfUser(){
+        SharedPreferences.Editor editor = pref.edit();
+        editor.clear();
+        editor.commit();
+        //Toast.makeText(this, "cache cleared", Toast.LENGTH_SHORT).show();
+    }
 
 }

@@ -2,13 +2,16 @@ package com.example.ezman.activities.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +21,8 @@ import com.example.ezman.activities.OrderInformationActivity;
 import com.example.ezman.libraries.GlobalVariables;
 import com.squareup.picasso.Picasso;
 
+import static android.content.Context.TELEPHONY_SERVICE;
+
 public class CustomerInfoFragment extends Fragment {
 
     TextView name;
@@ -25,6 +30,7 @@ public class CustomerInfoFragment extends Fragment {
     TextView contact_no;
     TextView address;
     ImageView image;
+    Button call;
 
     @Nullable
     @Override
@@ -41,6 +47,7 @@ public class CustomerInfoFragment extends Fragment {
         contact_no = getView().findViewById(R.id.ci_contact_no);
         address = getView().findViewById(R.id.ci_address);
         image = getView().findViewById(R.id.ci_image);
+        call = getView().findViewById(R.id.btn_call);
 
         name.setText(GlobalVariables.selectedTransaction.customer);
         email.setText(GlobalVariables.selectedTransaction.email);
@@ -56,5 +63,27 @@ public class CustomerInfoFragment extends Fragment {
                     .centerCrop()
                     .into(image);
         }
+
+        call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isTelephonyEnabled()){
+                    startDialActivity(GlobalVariables.selectedTransaction.contact_no);
+                }else{
+                    Toast.makeText(getContext(), "Telephone is not available on this device", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void startDialActivity(String phone){
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:"+phone));
+        startActivity(intent);
+    }
+
+    private boolean isTelephonyEnabled(){
+        TelephonyManager telephonyManager = (TelephonyManager) getActivity().getSystemService(TELEPHONY_SERVICE);
+        return telephonyManager != null && telephonyManager.getSimState()==TelephonyManager.SIM_STATE_READY;
     }
 }

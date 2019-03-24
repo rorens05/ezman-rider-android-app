@@ -1,6 +1,7 @@
 package com.example.ezman.libraries;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ public class GlobalVariables {
     public static final String GET_TRANSACTIONS = SERVER + "get_transactions";
     public static final String UPDATE_STATUS = SERVER + "update_status";
     public static final String UPDATE_DELIVERED = SERVER + "update_delivered";
+    public static final String CACHE_KEY = "USER_SAVED_INFO";
 
     //observable
     public static String latitude = "0";
@@ -38,6 +40,9 @@ public class GlobalVariables {
     public static Transaction selectedTransaction = new Transaction();
     public static Bitmap bitmap = null;
     public static String compressed_bitmap = null;
+    public static String username;
+    public static String password;
+    public static SharedPreferences pref;
 
     //messages
     public static final String FAILED = "failed";

@@ -2,7 +2,9 @@ package com.example.ezman.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
@@ -18,6 +20,9 @@ import com.example.ezman.R;
 import com.example.ezman.activities.fragments.CustomerFragment;
 import com.example.ezman.activities.fragments.ProfileFragment;
 import com.example.ezman.activities.fragments.TransactionFragment;
+import com.example.ezman.libraries.GlobalVariables;
+
+import static com.example.ezman.libraries.GlobalVariables.pref;
 
 public class DashboardActivity extends AppCompatActivity {
     private static final String TAG = "DashboardActivity";
@@ -55,12 +60,14 @@ public class DashboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+        saveUser();
         frameLayout = findViewById(R.id.fragment_container);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 new TransactionFragment()).commit();
+
     }
 
     @Override
@@ -94,5 +101,14 @@ public class DashboardActivity extends AppCompatActivity {
 
     public void back(){
         super.onBackPressed();
+    }
+
+    public void saveUser(){
+        pref = getApplicationContext().getSharedPreferences(GlobalVariables.CACHE_KEY, 0); // 0 - for private mode
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("username", GlobalVariables.username); // Storing username
+        editor.putString("password", GlobalVariables.password); // Storing password
+        editor.commit();
+        Log.d(TAG, "Rider Saved" + pref.getString("username", null));
     }
 }
